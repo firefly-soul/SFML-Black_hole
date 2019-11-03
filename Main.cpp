@@ -5,11 +5,11 @@
 using namespace sf;
 using namespace std;
 
-# define PI 3.14159265358979323846
+# define PI 3.14159265358979323846f
 
-const float G = 3.54;
-const float c = 30;
-const float dt = 0.1;
+const float G = 3.54f;
+const float c = 30.0f;
+const float dt = 0.1f;
 
 float getMagnitude(Vector2f v) {
 	return sqrt(v.x * v.x + v.y * v.y);
@@ -27,7 +27,7 @@ public:
 		photon.setRadius(4);
 		photon.setFillColor(Color::Red);
 		photon.setPosition(this->position);
-		angle = (rand() % 360) * PI / 180;
+		angle = (rand() % 360) * PI / 180.0f;
 		v = Vector2f(cos(angle) * c, sin(angle) * c);
 	}
 
@@ -80,8 +80,8 @@ public:
 		}
 		line[0][0].position = Vector2f(0, hole.getPosition().y);
 		line[0][1].position = Vector2f(1920, hole.getPosition().y);
-		line[1][0].position = Vector2f(0, hole.getPosition().y - rs * 2.6);
-		line[1][1].position = Vector2f(1920, hole.getPosition().y - rs * 2.6);
+		line[1][0].position = Vector2f(0, hole.getPosition().y - rs * 2.6f);
+		line[1][1].position = Vector2f(1920, hole.getPosition().y - rs * 2.6f);
 		line[0][0].color = Color::Black;
 		line[0][1].color = Color::Black;
 		line[1][0].color = Color::Black;
@@ -94,7 +94,7 @@ public:
 		const float r = getMagnitude(force);
 		const float fg = G * this->mass / (r * r);
 		float deltaTheta = -fg * (dt / c) * sin(p.angle - theta);
-		deltaTheta /= abs(1.0 - 2.0 * G * this->mass / (r * pow(c, 2)));
+		deltaTheta /= static_cast<float>(abs(1.0 - 2.0 * G * this->mass / (r * pow(c, 2))));
 		p.angle += deltaTheta;
 		p.v = Vector2f(cos(p.angle), sin(p.angle));
 		float pvMag = getMagnitude(p.v);
@@ -124,6 +124,8 @@ int main() {
 	m87 = new Blackhole(Vector2f(960, 540), 3000);
 
 	while (window.isOpen()) {
+		Event e;
+		window.pollEvent(e);
 		if (Keyboard::isKeyPressed(Keyboard::Escape)) {
 			window.close();
 		}
